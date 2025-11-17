@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>🎄 Ma Liste de Noël</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="pageTitle">🎄 Ma Liste de Noël</h1>
+            <div class="admin-nav">
+                <span id="welcomeMessage"></span>
+                <a href="index.html" class="btn-secondary">Voir toutes les listes</a>
+                <button onclick="logout()" class="btn-secondary">Déconnexion</button>
+            </div>
+        </header>
+
+        <div class="admin-panel">
+            <div class="form-card">
+                <h2 id="formTitle">➕ Ajouter un souhait</h2>
+                <form id="wishForm">
+                    <input type="hidden" id="editId">
+                    <input type="hidden" id="memberId">
+                    
+                    <div class="form-group">
+                        <label for="name">Nom du souhait *</label>
+                        <input type="text" id="name" required placeholder="Ex: Chargeur iPhone USB-C">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Catégorie *</label>
+                        <select id="category" required>
+                            <option value="">Choisir une catégorie</option>
+                            <option value="Technologie">Technologie</option>
+                            <option value="Livres / Films">Livres / Films</option>
+                            <option value="Vêtements / Accessoires">Vêtements / Accessoires</option>
+                            <option value="Maison / Décoration">Maison / Décoration</option>
+                            <option value="Expériences">Expériences</option>
+                            <option value="Autres">Autres</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">Gamme de prix *</label>
+                        <select id="price" required>
+                            <option value="">Choisir un prix</option>
+                            <option value="<20">Moins de 20€</option>
+                            <option value="<50">Moins de 50€</option>
+                            <option value="<100">Moins de 100€</option>
+                            <option value=">100">Plus de 100€</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="link">Lien d'achat</label>
+                        <input type="url" id="link" placeholder="https://...">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Image d'illustration</label>
+                        <input type="hidden" id="currentImagePath">
+                        
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="imageFile" class="file-upload-input" accept="image/*">
+                            <label for="imageFile" class="file-upload-label">
+                                <span>📷</span>
+                                <span>Cliquez pour uploader une image (ou glissez-déposez)</span>
+                            </label>
+                        </div>
+                        
+                        <div id="imagePreview" class="image-preview"></div>
+                        
+                        <div class="url-input-wrapper">
+                            <label for="imageUrl" class="url-input-label">Ou collez une URL d'image</label>
+                            <input type="url" id="imageUrl" placeholder="https://... (optionnel)">
+                        </div>
+                        
+                        <span class="form-hint">💡 JPG, PNG, GIF ou WebP - Max 5MB - Recommandé: 800x600px</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" rows="3" placeholder="Ajoutez des détails si vous le souhaitez..."></textarea>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" id="favorite">
+                            ⭐ Souhait préféré
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary" id="submitBtn">Ajouter</button>
+                        <button type="button" class="btn-secondary hidden" id="cancelBtn">Annuler</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="wishes-list">
+                <h2>📋 Mes souhaits</h2>
+                <div id="myWishlist">
+                    <!-- Les souhaits seront ajoutés ici par JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/my-list.js"></script>
+</body>
+</html>

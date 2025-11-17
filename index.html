@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#2c5f2d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <title>🎄 Ma Liste de Noël 2025</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Flocons de neige animés -->
+    <div class="snowflakes" aria-hidden="true">
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1 class="main-title">🎄 Listes de Noël 2025 🎁</h1>
+            <div class="letter-intro">
+                <p class="dear-santa">Cher Père Noël,</p>
+                <p class="intro-text">
+                    Cette année, toute la famille a été très sage ! 😇 Voici nos listes de souhaits pour Noël. 
+                    Tout est organisé par membre, catégorie et budget pour t'aider à choisir. 
+                    Les cadeaux avec une étoile ⭐ sont les préférés !
+                </p>
+                <p class="intro-signature">Avec beaucoup d'espoir et de gratitude,</p>
+                <p class="intro-name">La Famille 💝</p>
+            </div>
+            <a href="login.html" class="btn-pdf" title="Accéder à ma liste personnelle">
+                🔐 Ma liste
+            </a>
+        </header>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>👤 Membre :</label>
+                <select id="memberSelect" aria-label="Filtrer par membre">
+                    <option value="all">Tous les membres</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Catégorie :</label>
+                <select id="categoryFilter" aria-label="Filtrer par catégorie">
+                    <option value="all">Toutes les catégories</option>
+                    <option value="Technologie">Technologie</option>
+                    <option value="Livres / Films">Livres / Films</option>
+                    <option value="Vêtements / Accessoires">Vêtements / Accessoires</option>
+                    <option value="Maison / Décoration">Maison / Décoration</option>
+                    <option value="Expériences">Expériences</option>
+                    <option value="Autres">Autres</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Budget :</label>
+                <select id="priceFilter" aria-label="Filtrer par budget">
+                    <option value="all">Tous les prix</option>
+                    <option value="<20">Moins de 20€</option>
+                    <option value="<50">Moins de 50€</option>
+                    <option value="<100">Moins de 100€</option>
+                    <option value=">100">Plus de 100€</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="wishlist" class="wishlist-grid">
+            <!-- Les souhaits seront ajoutés ici par JavaScript -->
+        </div>
+
+        <div id="emptyState" class="empty-state hidden">
+            <p>🎅 Aucun souhait ne correspond à vos critères</p>
+        </div>
+    </div>
+
+    <script src="assets/js/public.js"></script>
+</body>
+</html>

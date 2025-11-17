@@ -1,0 +1,964 @@
+/* ============================================
+   VARIABLES & CONFIGURATION
+   ============================================ */
+:root {
+    /* Palette vintage Noël - tons chauds et doux */
+    --red-vintage: #8b2e2e;
+    --red-light: #b84c4c;
+    --green-vintage: #2c5f2d;
+    --green-light: #3d7a3e;
+    --gold: #d4af37;
+    --cream: #f5f1e8;
+    --cream-dark: #e8dcc7;
+    --brown: #5c4033;
+    --white-snow: #ffffff;
+    --shadow-soft: rgba(60, 40, 30, 0.15);
+    --shadow-medium: rgba(60, 40, 30, 0.25);
+    
+    /* Typographie */
+    --font-title: 'Playfair Display', 'Georgia', 'Times New Roman', serif;
+    --font-body: 'Crimson Text', 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+    
+    /* Transitions */
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: #1a1a1a;
+    color: var(--brown);
+    line-height: 1.6;
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Fond d'écran avec superposition subtile */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/fond.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    z-index: -2;
+}
+
+/* Superposition pour intégrer le fond avec le contenu */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(245, 241, 232, 0.92) 0%,
+        rgba(232, 220, 199, 0.88) 50%,
+        rgba(245, 241, 232, 0.92) 100%
+    );
+    z-index: -1;
+    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(1px);
+}
+
+/* ============================================
+   ANIMATIONS FLOCONS DE NEIGE
+   ============================================ */
+.snowflakes {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+}
+
+.snowflake {
+    position: absolute;
+    top: -10px;
+    color: var(--white-snow);
+    font-size: 1em;
+    font-family: Arial, sans-serif;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    animation: snowfall linear infinite;
+    opacity: 0.8;
+}
+
+@keyframes snowfall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0.3;
+    }
+}
+
+/* Distribution aléatoire des flocons */
+.snowflake:nth-child(1) { left: 10%; animation-duration: 10s; animation-delay: 0s; font-size: 1.2em; }
+.snowflake:nth-child(2) { left: 20%; animation-duration: 12s; animation-delay: 2s; font-size: 0.9em; }
+.snowflake:nth-child(3) { left: 30%; animation-duration: 9s; animation-delay: 4s; font-size: 1.4em; }
+.snowflake:nth-child(4) { left: 40%; animation-duration: 11s; animation-delay: 1s; font-size: 1em; }
+.snowflake:nth-child(5) { left: 50%; animation-duration: 13s; animation-delay: 3s; font-size: 1.1em; }
+.snowflake:nth-child(6) { left: 60%; animation-duration: 10s; animation-delay: 5s; font-size: 0.95em; }
+.snowflake:nth-child(7) { left: 70%; animation-duration: 12s; animation-delay: 2.5s; font-size: 1.3em; }
+.snowflake:nth-child(8) { left: 80%; animation-duration: 11s; animation-delay: 4.5s; font-size: 1em; }
+.snowflake:nth-child(9) { left: 90%; animation-duration: 9s; animation-delay: 1.5s; font-size: 1.15em; }
+.snowflake:nth-child(10) { left: 15%; animation-duration: 13s; animation-delay: 3.5s; font-size: 0.85em; }
+
+/* ============================================
+   CONTAINER & LAYOUT
+   ============================================ */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ============================================
+   HEADER & TITRE
+   ============================================ */
+header {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: fadeInDown 1s ease-out;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-title {
+    font-family: var(--font-title);
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    color: var(--red-vintage);
+    text-shadow: 
+        2px 2px 0 var(--gold),
+        4px 4px 10px var(--shadow-soft);
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+    position: relative;
+    display: inline-block;
+    padding: 0 20px;
+}
+
+.main-title::before,
+.main-title::after {
+    content: '✦';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    font-size: 0.5em;
+    animation: twinkle 2s ease-in-out infinite;
+}
+
+.main-title::before { left: -10px; }
+.main-title::after { right: -10px; animation-delay: 1s; }
+
+@keyframes twinkle {
+    0%, 100% { opacity: 1; transform: translateY(-50%) scale(1); }
+    50% { opacity: 0.5; transform: translateY(-50%) scale(1.2); }
+}
+
+/* ============================================
+   LETTRE D'INTRODUCTION
+   ============================================ */
+.letter-intro {
+    background: linear-gradient(135deg, var(--cream) 0%, var(--white-snow) 100%);
+    border: 3px solid var(--gold);
+    border-radius: 15px;
+    padding: 35px 40px;
+    margin: 30px auto;
+    max-width: 800px;
+    box-shadow: 
+        0 10px 30px var(--shadow-medium),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    position: relative;
+    overflow: hidden;
+}
+
+.letter-intro::before {
+    content: '🎅';
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 3rem;
+    opacity: 0.1;
+    transform: rotate(15deg);
+}
+
+.dear-santa {
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    color: var(--red-vintage);
+    font-style: italic;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.intro-text {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--brown);
+    margin-bottom: 20px;
+    text-align: justify;
+}
+
+.intro-signature {
+    font-style: italic;
+    color: var(--green-vintage);
+    margin-top: 25px;
+    margin-bottom: 5px;
+}
+
+.intro-name {
+    font-family: var(--font-title);
+    font-size: 1.3rem;
+    color: var(--red-vintage);
+    font-weight: bold;
+}
+
+/* ============================================
+   BOUTON PDF
+   ============================================ */
+.btn-pdf {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--red-vintage) 0%, var(--red-light) 100%);
+    color: var(--white-snow);
+    padding: 15px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    box-shadow: 
+        0 5px 15px var(--shadow-medium),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: var(--transition-smooth);
+    margin-top: 20px;
+    border: 2px solid var(--gold);
+    position: relative;
+    overflow: hidden;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.btn-pdf::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-pdf:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 
+        0 8px 25px var(--shadow-medium),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-color: var(--white-snow);
+    color: var(--white-snow);
+}
+
+.btn-pdf:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-pdf:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+/* ============================================
+   FILTRES
+   ============================================ */
+.filters {
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 40px 0;
+    padding: 25px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(245, 241, 232, 0.7) 100%);
+    border-radius: 15px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    box-shadow: 0 5px 20px var(--shadow-soft);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.filter-group label {
+    font-weight: bold;
+    color: var(--green-vintage);
+    font-size: 1.05rem;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.filter-group select {
+    padding: 10px 16px;
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    background: var(--white-snow);
+    color: var(--brown);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    box-shadow: 0 2px 8px var(--shadow-soft);
+    min-width: 180px;
+}
+
+.filter-group select:hover {
+    border-color: var(--red-vintage);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-medium);
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: var(--green-vintage);
+    box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.2);
+}
+
+/* ============================================
+   GRILLE DE SOUHAITS
+   ============================================ */
+.wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+/* ============================================
+   CARTE DE SOUHAIT
+   ============================================ */
+.wish-card {
+    background: linear-gradient(135deg, var(--white-snow) 0%, var(--cream) 100%);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 20px var(--shadow-soft);
+    transition: var(--transition-smooth);
+    border: 3px solid transparent;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease-out backwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation décalée pour chaque carte */
+.wish-card:nth-child(1) { animation-delay: 0.1s; }
+.wish-card:nth-child(2) { animation-delay: 0.2s; }
+.wish-card:nth-child(3) { animation-delay: 0.3s; }
+.wish-card:nth-child(4) { animation-delay: 0.4s; }
+.wish-card:nth-child(5) { animation-delay: 0.5s; }
+.wish-card:nth-child(6) { animation-delay: 0.6s; }
+
+.wish-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--red-vintage) 50%, var(--green-vintage) 100%);
+    border-radius: 15px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+.wish-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 
+        0 15px 40px var(--shadow-medium),
+        0 0 20px rgba(212, 175, 55, 0.3);
+    background: linear-gradient(135deg, #ffffff 0%, #faf7f0 100%);
+}
+
+.wish-card:hover::before {
+    opacity: 1;
+}
+
+.wish-card:hover .wish-title,
+.wish-card:hover .wish-description,
+.wish-card:hover .wish-price {
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+}
+
+.wish-card.priority {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, #fffef5 0%, var(--cream) 100%);
+}
+
+.wish-card.priority::after {
+    content: '⭐';
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 2rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    50% { 
+        transform: scale(1.2) rotate(180deg);
+        opacity: 0.8;
+    }
+}
+
+/* Image du souhait */
+.wish-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 12px var(--shadow-soft);
+    transition: var(--transition-smooth);
+}
+
+.wish-card:hover .wish-image {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px var(--shadow-medium);
+}
+
+/* Contenu de la carte */
+.wish-title {
+    font-family: var(--font-title);
+    font-size: 1.4rem;
+    color: var(--red-vintage);
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.wish-category {
+    display: inline-block;
+    background: var(--green-vintage);
+    color: var(--white-snow);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 5px var(--shadow-soft);
+}
+
+.wish-description {
+    color: var(--brown);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.wish-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid var(--cream-dark);
+}
+
+.wish-price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--green-vintage);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.wish-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, var(--green-vintage) 0%, var(--green-light) 100%);
+    color: var(--white-snow);
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    transition: var(--transition-bounce);
+    box-shadow: 0 3px 10px var(--shadow-soft);
+    border: 2px solid transparent;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.wish-link:hover {
+    background: linear-gradient(135deg, #9d3333 0%, #c85555 100%);
+    transform: translateX(5px) scale(1.05);
+    box-shadow: 0 5px 15px var(--shadow-medium);
+    border-color: var(--gold);
+    color: var(--white-snow);
+}
+
+.wish-link::after {
+    content: '→';
+    transition: transform 0.3s ease;
+}
+
+.wish-link:hover::after {
+    transform: translateX(5px);
+}
+
+/* ============================================
+   ÉTAT VIDE
+   ============================================ */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    font-size: 1.5rem;
+    color: var(--brown);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(245, 241, 232, 0.8) 100%);
+    border-radius: 15px;
+    margin: 40px 0;
+    border: 3px dashed var(--gold);
+}
+
+/* ============================================
+   CLASSES UTILITAIRES
+   ============================================ */
+.hidden {
+    display: none !important;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Tablettes et petits écrans */
+@media (max-width: 1024px) {
+    .wishlist-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+}
+
+/* Tablettes portrait et grands téléphones */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px 15px;
+    }
+    
+    .main-title {
+        font-size: 2rem;
+        padding: 0 10px;
+    }
+    
+    .main-title::before,
+    .main-title::after {
+        display: none;
+    }
+    
+    .letter-intro {
+        padding: 25px 20px;
+        margin: 20px auto;
+    }
+    
+    .letter-intro::before {
+        font-size: 2rem;
+        top: 10px;
+        right: 10px;
+    }
+    
+    .dear-santa {
+        font-size: 1.3rem;
+    }
+    
+    .intro-text {
+        font-size: 1rem;
+        text-align: left;
+    }
+    
+    .btn-pdf {
+        width: 100%;
+        text-align: center;
+        padding: 14px 30px;
+    }
+    
+    .filters {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        padding: 20px;
+    }
+    
+    .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    
+    .filter-group label {
+        font-size: 1rem;
+    }
+    
+    .filter-group select {
+        width: 100%;
+        min-width: unset;
+        padding: 12px 16px;
+        font-size: 1rem;
+    }
+    
+    .wishlist-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .wish-card {
+        padding: 20px;
+    }
+    
+    .wish-image {
+        height: 180px;
+    }
+    
+    .wish-title {
+        font-size: 1.3rem;
+    }
+    
+    .wish-footer {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+    
+    .wish-price {
+        justify-content: center;
+        font-size: 1.4rem;
+    }
+    
+    .wish-link {
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+}
+
+/* Smartphones */
+@media (max-width: 480px) {
+    .container {
+        padding: 15px 10px;
+    }
+    
+    .main-title {
+        font-size: 1.6rem;
+        line-height: 1.3;
+        margin-bottom: 20px;
+    }
+    
+    .letter-intro {
+        padding: 20px 15px;
+        border-width: 2px;
+    }
+    
+    .dear-santa {
+        font-size: 1.2rem;
+    }
+    
+    .intro-text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
+    
+    .intro-signature {
+        font-size: 0.9rem;
+        margin-top: 20px;
+    }
+    
+    .intro-name {
+        font-size: 1.1rem;
+    }
+    
+    .btn-pdf {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+    
+    .filters {
+        padding: 15px;
+    }
+    
+    .filter-group select {
+        padding: 10px 14px;
+        font-size: 0.95rem;
+    }
+    
+    .wish-card {
+        padding: 15px;
+    }
+    
+    .wish-card.priority::after {
+        font-size: 1.5rem;
+        top: 10px;
+        right: 10px;
+    }
+    
+    .wish-image {
+        height: 160px;
+    }
+    
+    .wish-title {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+    }
+    
+    .wish-category {
+        font-size: 0.8rem;
+        padding: 4px 10px;
+    }
+    
+    .wish-description {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .wish-footer {
+        margin-top: 12px;
+        padding-top: 12px;
+    }
+    
+    .wish-price {
+        font-size: 1.3rem;
+    }
+    
+    .wish-link {
+        padding: 10px 18px;
+        font-size: 0.95rem;
+    }
+    
+    .empty-state {
+        padding: 50px 15px;
+        font-size: 1.2rem;
+    }
+    
+    /* Flocons plus petits sur mobile */
+    .snowflake {
+        font-size: 0.8em;
+    }
+}
+
+/* Très petits écrans */
+@media (max-width: 360px) {
+    .main-title {
+        font-size: 1.4rem;
+    }
+    
+    .wish-image {
+        height: 140px;
+    }
+    
+    .wish-title {
+        font-size: 1.1rem;
+    }
+}
+
+/* Orientation paysage sur mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .container {
+        padding: 15px;
+    }
+    
+    .letter-intro {
+        padding: 15px 20px;
+    }
+    
+    .main-title {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .filters {
+        padding: 15px;
+    }
+    
+    .wish-card {
+        padding: 15px;
+    }
+    
+    .wish-image {
+        height: 120px;
+    }
+    
+    /* Réduire les flocons en paysage */
+    .snowflake {
+        font-size: 0.7em;
+    }
+}
+
+/* Support dark mode (optionnel) */
+@media (prefers-color-scheme: dark) {
+    /* Le site garde ses couleurs vintage même en dark mode */
+    /* mais on peut ajuster la luminosité de fond si nécessaire */
+}
+
+/* ============================================
+   ACCESSIBILITÉ & OPTIMISATIONS MOBILE
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .snowflakes {
+        display: none;
+    }
+}
+
+/* Focus visible pour navigation clavier */
+a:focus-visible,
+button:focus-visible,
+select:focus-visible {
+    outline: 3px solid var(--red-vintage);
+    outline-offset: 3px;
+}
+
+/* Optimisations tactiles pour mobile */
+@media (hover: none) and (pointer: coarse) {
+    /* Zones de touch plus grandes sur mobile */
+    .btn-pdf,
+    .wish-link,
+    .filter-group select,
+    button {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Supprimer les effets hover sur mobile tactile */
+    .wish-card:hover {
+        transform: none;
+    }
+    
+    /* Améliorer le touch feedback */
+    .wish-card:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+    
+    .btn-pdf:active,
+    .wish-link:active,
+    button:active {
+        transform: scale(0.95);
+    }
+    
+    /* Désactiver les animations complexes sur mobile */
+    .wish-card::before {
+        display: none;
+    }
+}
+
+/* Amélioration de la performance mobile */
+@media (max-width: 768px) {
+    /* Optimiser les animations pour mobile */
+    * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Réduire la complexité des ombres sur mobile */
+    .wish-card {
+        box-shadow: 0 3px 10px var(--shadow-soft);
+    }
+    
+    .wish-card:hover {
+        box-shadow: 0 5px 15px var(--shadow-soft);
+    }
+    
+    /* Performance des flocons */
+    .snowflake {
+        will-change: transform;
+    }
+}
+
+/* ============================================
+   PRINT
+   ============================================ */
+@media print {
+    .snowflakes,
+    .filters,
+    .btn-pdf {
+        display: none;
+    }
+    
+    body::after {
+        background: white;
+    }
+    
+    .wish-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}

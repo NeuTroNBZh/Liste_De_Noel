@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>🔐 Connexion - Liste de Noël</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header h1 {
+            color: var(--green);
+            margin-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--green-dark);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Crimson Text', serif;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--green);
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: #2c5f2d;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Crimson Text', serif;
+        }
+        
+        .btn-login:hover {
+            background: #1a3a1b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(44, 95, 45, 0.3);
+        }
+        
+        .btn-login:active {
+            transform: translateY(0);
+        }
+        
+        .error-message {
+            background: #ffe6e6;
+            color: #c00;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        
+        .success-message {
+            background: #e6ffe6;
+            color: #060;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .back-link a {
+            color: var(--green);
+            text-decoration: none;
+        }
+        
+        .step-indicator {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .link-button {
+            background: none;
+            border: none;
+            color: #2c5f2d;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            font-weight: 600;
+        }
+        
+        .link-button:hover {
+            color: #1a3a1b;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>🔐 Connexion</h1>
+            <p id="headerText">Entrez votre email pour recevoir un code</p>
+        </div>
+        
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+        
+        <div class="step-indicator" id="stepIndicator">Étape 1/3</div>
+        
+        <!-- Étape 1: Demander l'email -->
+        <form id="emailForm" class="login-step hidden">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required placeholder="votre@email.fr">
+            </div>
+            
+            <button type="submit" class="btn-login">Recevoir un code</button>
+        </form>
+        
+        <!-- Étape 2: Entrer le code -->
+        <form id="codeForm" class="login-step hidden">
+            <div class="form-group">
+                <label for="code">Code de vérification</label>
+                <input type="text" id="code" required placeholder="000000" maxlength="6" pattern="[0-9]{6}">
+                <small>Un code à 6 chiffres vous a été envoyé par email</small>
+            </div>
+            
+            <button type="submit" class="btn-login">Vérifier le code</button>
+            <button type="button" class="link-button" id="resendCode">Renvoyer le code</button>
+        </form>
+        
+        <!-- Étape 3: Créer un mot de passe (première connexion) -->
+        <form id="passwordForm" class="login-step hidden">
+            <div class="form-group">
+                <label for="newPassword">Créer un mot de passe</label>
+                <input type="password" id="newPassword" required placeholder="••••••••" minlength="6">
+                <small>Minimum 6 caractères</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirmer le mot de passe</label>
+                <input type="password" id="confirmPassword" required placeholder="••••••••">
+            </div>
+            
+            <button type="submit" class="btn-login">Créer et se connecter</button>
+        </form>
+        
+        <!-- Connexion avec mot de passe existant -->
+        <form id="loginForm" class="login-step">
+            <div class="form-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" required placeholder="votre@email.fr">
+            </div>
+            
+            <div class="form-group">
+                <label for="loginPassword">Mot de passe</label>
+                <input type="password" id="loginPassword" required placeholder="••••••••">
+            </div>
+            
+            <button type="submit" class="btn-login">Se connecter</button>
+            <button type="button" class="link-button" id="forgotPassword">Mot de passe oublié ?</button>
+            <button type="button" class="link-button" id="firstConnection">Première connexion ?</button>
+        </form>
+        
+        <div class="back-link">
+            <a href="index.html">← Retour à la liste publique</a>
+        </div>
+    </div>
+
+    <script>
+        let currentEmail = '';
+        let currentMemberId = '';
+        let currentStep = 1;
+        
+        const errorDiv = document.getElementById('errorMessage');
+        const successDiv = document.getElementById('successMessage');
+        const stepIndicator = document.getElementById('stepIndicator');
+        const headerText = document.getElementById('headerText');
+        
+        function showError(message) {
+            errorDiv.textContent = '❌ ' + message;
+            errorDiv.style.display = 'block';
+            successDiv.style.display = 'none';
+        }
+        
+        function showSuccess(message) {
+            successDiv.textContent = '✅ ' + message;
+            successDiv.style.display = 'block';
+            errorDiv.style.display = 'none';
+        }
+        
+        function hideMessages() {
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+        }
+        
+        function showStep(step) {
+            currentStep = step;
+            document.querySelectorAll('.login-step').forEach(form => form.classList.add('hidden'));
+            hideMessages();
+            
+            if (step === 1) {
+                document.getElementById('emailForm').classList.remove('hidden');
+                headerText.textContent = 'Première connexion - Entrez votre email';
+                stepIndicator.textContent = 'Étape 1/3';
+            } else if (step === 2) {
+                document.getElementById('codeForm').classList.remove('hidden');
+                headerText.textContent = 'Vérifiez votre email';
+                stepIndicator.textContent = 'Étape 2/3';
+            } else if (step === 3) {
+                document.getElementById('passwordForm').classList.remove('hidden');
+                headerText.textContent = 'Créez votre mot de passe';
+                stepIndicator.textContent = 'Étape 3/3';
+            } else if (step === 'login') {
+                document.getElementById('loginForm').classList.remove('hidden');
+                headerText.textContent = 'Connectez-vous avec votre mot de passe';
+                stepIndicator.textContent = '';
+            }
+        }
+        
+        // Étape 1: Demander le code par email
+        document.getElementById('emailForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideMessages();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Envoi en cours...';
+            submitBtn.disabled = true;
+            
+            try {
+                currentEmail = document.getElementById('email').value;
+                
+                const response = await fetch('includes/api.php?action=requestCode', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: currentEmail })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showSuccess('Code envoyé ! Vérifiez votre boîte email.');
+                    setTimeout(() => showStep(2), 1500);
+                } else {
+                    showError(result.message);
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                showError('Erreur lors de l\'envoi du code');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+        
+        // Étape 2: Vérifier le code
+        document.getElementById('codeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideMessages();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Vérification...';
+            submitBtn.disabled = true;
+            
+            try {
+                const code = document.getElementById('code').value;
+                
+                const response = await fetch('includes/api.php?action=verifyCode', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: currentEmail, code: code })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    if (result.needsPassword) {
+                        // Première connexion, créer un mot de passe
+                        currentMemberId = result.memberId;
+                        showSuccess('Code vérifié ! Créez maintenant votre mot de passe.');
+                        setTimeout(() => showStep(3), 1500);
+                    } else {
+                        // Connexion directe
+                        showSuccess('Connexion réussie ! Redirection...');
+                        setTimeout(() => {
+                            if (result.user.role === 'admin') {
+                                window.location.href = 'admin.html';
+                            } else {
+                                window.location.href = 'my-list.html';
+                            }
+                        }, 1500);
+                    }
+                } else {
+                    showError(result.message);
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                showError('Erreur lors de la vérification');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+        
+        // Renvoyer le code
+        document.getElementById('resendCode').addEventListener('click', async () => {
+            hideMessages();
+            try {
+                const response = await fetch('includes/api.php?action=requestCode', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: currentEmail })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    showSuccess('Nouveau code envoyé !');
+                } else {
+                    showError(result.message);
+                }
+            } catch (error) {
+                showError('Erreur lors du renvoi');
+            }
+        });
+        
+        // Étape 3: Créer le mot de passe
+        document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideMessages();
+            
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword !== confirmPassword) {
+                showError('Les mots de passe ne correspondent pas');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                showError('Le mot de passe doit contenir au moins 6 caractères');
+                return;
+            }
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Création...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch('includes/api.php?action=setPassword', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ memberId: currentMemberId, password: newPassword })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showSuccess('Mot de passe créé ! Redirection...');
+                    setTimeout(() => {
+                        if (result.user.role === 'admin') {
+                            window.location.href = 'admin.html';
+                        } else {
+                            window.location.href = 'my-list.html';
+                        }
+                    }, 1500);
+                } else {
+                    showError(result.message);
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                showError('Erreur lors de la création du mot de passe');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+        
+        // Connexion directe avec mot de passe
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideMessages();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Connexion...';
+            submitBtn.disabled = true;
+            
+            try {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                const response = await fetch('includes/api.php?action=login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showSuccess('Connexion réussie ! Redirection...');
+                    setTimeout(() => {
+                        if (result.user.role === 'admin') {
+                            window.location.href = 'admin.html';
+                        } else {
+                            window.location.href = 'my-list.html';
+                        }
+                    }, 1000);
+                } else {
+                    showError(result.message);
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                showError('Une erreur est survenue');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+        
+        // Mot de passe oublié - redemander le code
+        document.getElementById('forgotPassword').addEventListener('click', () => {
+            showStep(1);
+        });
+        
+        // Première connexion - redemander le code
+        document.getElementById('firstConnection').addEventListener('click', () => {
+            showStep(1);
+        });
+        
+        // Vérifier si déjà connecté
+        (async () => {
+            try {
+                const response = await fetch('includes/api.php?action=getCurrentUser');
+                const result = await response.json();
+                
+                if (result.success) {
+                    if (result.user.role === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'my-list.html';
+                    }
+                } else {
+                    // Pas connecté, afficher le formulaire de connexion
+                    showStep('login');
+                }
+            } catch (error) {
+                // Pas connecté, afficher le formulaire de connexion
+                showStep('login');
+            }
+        })();
+    </script>
+</body>
+</html>
