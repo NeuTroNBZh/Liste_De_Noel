@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2025 Louis Cerclé-Cheminel
+Copyright (c) 2024 Louis Cercle
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+Note: Ce projet est un projet éducatif personnel développé pour apprendre
+les meilleures pratiques de développement web, la sécurité et l'architecture
+d'applications. Bien que plusieurs mesures de sécurité soient implémentées,
+l'auteur ne garantit pas l'absence de vulnérabilités. Une révision de sécurité
+professionnelle est recommandée avant toute utilisation en production avec
+des données sensibles.

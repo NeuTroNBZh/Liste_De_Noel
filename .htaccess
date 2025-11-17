@@ -1,0 +1,72 @@
+# Force HTTPS
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# Protection des fichiers sensibles
+<FilesMatch "^(config\.php)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Protection du dossier includes
+<Directory "includes">
+    Options -Indexes
+    <Files "*.php">
+        <IfModule mod_authz_core.c>
+            Require all denied
+        </IfModule>
+        <IfModule !mod_authz_core.c>
+            Order allow,deny
+            Deny from all
+        </IfModule>
+    </Files>
+</Directory>
+
+# Autoriser l'accès à api.php
+<Files "api.php">
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Allow from all
+    </IfModule>
+</Files>
+
+# Compression Gzip
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Cache des fichiers statiques
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/pdf "access plus 1 month"
+</IfModule>
+
+# Sécurité - Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Page d'erreur personnalisée
+ErrorDocument 404 /index.html
+ErrorDocument 500 /index.html
+
+# Désactiver l'indexation des répertoires
+Options -Indexes
+
+# UTF-8 encoding
+AddDefaultCharset UTF-8
+AddCharset UTF-8 .html .css .js .xml .json .rss .atom

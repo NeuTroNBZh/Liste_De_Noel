@@ -1,0 +1,43 @@
+# Fichiers de configuration sensibles
+.env
+includes/config.php.local
+
+# Uploads et médias générés par les utilisateurs
+assets/uploads/*
+!assets/uploads/.gitkeep
+
+# Fichiers de base de données
+*.sql
+*.db
+*.sqlite
+
+# Logs
+*.log
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Éditeurs et IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+
+# Dépendances (si vous ajoutez des gestionnaires de paquets plus tard)
+/vendor/
+node_modules/
+
+# Fichiers de test et debug
+diagnostic.php
+test-*.php
+test-*.html
+check_installation.php
+
+# Fichiers temporaires
+*.tmp
+*.bak
+*.cache
