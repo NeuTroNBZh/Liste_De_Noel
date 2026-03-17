@@ -334,3 +334,6 @@ Merci d'avoir pris le temps de consulter ce projet ! N'hésitez pas à :
 *"Ce n'est pas parce que c'est moche que ça ne fonctionne pas !"* 😉
 
 </div>
+
+## Deployment
+See DEPLOY.md for server setup instructions.
