@@ -340,3 +340,6 @@ See DEPLOY.md for server setup instructions.
 
 ## FAQ
 See FAQ.md for common questions.
+
+## Contributors
+- Louis CERCLÉ-CHEMINEL
