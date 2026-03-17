@@ -337,3 +337,6 @@ Merci d'avoir pris le temps de consulter ce projet ! N'hésitez pas à :
 
 ## Deployment
 See DEPLOY.md for server setup instructions.
+
+## FAQ
+See FAQ.md for common questions.
