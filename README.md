@@ -5,7 +5,8 @@
 ![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?logo=mysql)
 ![Security](https://img.shields.io/badge/Security-2FA-green)
 
-> **Démo en ligne :** [liste.louis-cercle.site](https://liste.louis-cercle.site)
+> **Démo en ligne :** [liste.louis-cercle.site](https://liste.louis-cercle.site) (usage réel)
+> **Démo publique avec fausses données :** [demo-liste-noel.neutronbzh.fr](https://demo-liste-noel.neutronbzh.fr) — comptes `admin@demo-noel.local` / `maman@demo-noel.local` / `enfant@demo-noel.local`, mot de passe `Demo1234` (réinitialisée chaque nuit)
 
 ## 📋 À Propos
 
