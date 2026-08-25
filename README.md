@@ -203,38 +203,39 @@ L'API est accessible via `includes/api.php` avec le paramètre `?action=`.
 
 | Méthode | Endpoint | Description | Auth |
 |---------|----------|-------------|------|
-| GET | `?action=members` | Liste tous les membres | Non |
-| GET | `?action=member&id={id}` | Détails d'un membre | Non |
-| POST | `?action=create_member` | Créer un membre | Admin |
-| PUT | `?action=update_member&id={id}` | Modifier un membre | Admin |
-| DELETE | `?action=delete_member&id={id}` | Supprimer un membre | Admin |
+| GET | `?action=getMembers` | Liste tous les membres | Non |
+| GET | `?action=getMember&id={id}` | Détails d'un membre | Non |
+| POST | `?action=addMember` | Créer un membre | Admin |
+| PUT | `?action=updateMember` | Modifier un membre | Admin |
+| DELETE | `?action=deleteMember&id={id}` | Supprimer un membre | Admin |
 
-### Wishes (Souhaits/Articles)
+### Wishes (Souhaits)
 
 | Méthode | Endpoint | Description | Auth |
 |---------|----------|-------------|------|
-| GET | `?action=wishes` | Liste tous les souhaits | Non |
-| GET | `?action=wish&id={id}` | Détails d'un souhait | Non |
-| POST | `?action=create_wish` | Créer un souhait | Oui |
-| PUT | `?action=update_wish&id={id}` | Modifier un souhait | Propriétaire/Admin |
-| DELETE | `?action=delete_wish&id={id}` | Supprimer un souhait | Propriétaire/Admin |
+| GET | `?action=getAll` | Liste tous les souhaits | Non |
+| POST | `?action=uploadImage` | Uploader une image | Oui |
+| POST | `?action=add` | Créer un souhait | Propriétaire/Admin |
+| PUT | `?action=update` | Modifier un souhait | Propriétaire/Admin |
+| DELETE | `?action=delete&id={id}` | Supprimer un souhait | Propriétaire/Admin |
 
 ### Authentification
 
 | Méthode | Endpoint | Description |
 |---------|----------|-------------|
-| POST | `?action=send_verification` | Envoyer un code 2FA |
-| POST | `?action=verify_code` | Vérifier le code 2FA |
-| POST | `?action=login` | Connexion finale avec mot de passe |
-| GET | `?action=check_auth` | Vérifier la session |
+| POST | `?action=requestCode` | Envoyer un code 2FA |
+| POST | `?action=verifyCode` | Vérifier le code 2FA |
+| POST | `?action=setPassword` | Créer le mot de passe (première connexion) |
+| POST | `?action=login` | Connexion avec mot de passe |
+| GET | `?action=getCurrentUser` | Vérifier la session |
 | POST | `?action=logout` | Déconnexion |
 
 ### Réservations
 
 | Méthode | Endpoint | Description | Auth |
 |---------|----------|-------------|------|
-| POST | `?action=reserve_wish&id={id}` | Réserver un souhait | Oui |
-| POST | `?action=unreserve_wish&id={id}` | Annuler une réservation | Oui |
+| POST | `?action=reserve&id={id}` | Réserver un souhait | Oui |
+| POST | `?action=unreserve&id={id}` | Annuler une réservation | Réservataire/Admin |
 
 ---
 
@@ -334,12 +335,6 @@ Merci d'avoir pris le temps de consulter ce projet ! N'hésitez pas à :
 *"Ce n'est pas parce que c'est moche que ça ne fonctionne pas !"* 😉
 
 </div>
-
-## Deployment
-See DEPLOY.md for server setup instructions.
-
-## FAQ
-See FAQ.md for common questions.
 
 ## Contributors
 - Louis CERCLÉ-CHEMINEL
