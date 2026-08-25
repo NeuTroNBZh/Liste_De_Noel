@@ -76,8 +76,9 @@ try {
             break;
 
         case 'addMember':
+            requireAdmin();
             $data = json_decode(file_get_contents('php://input'), true);
-            
+
             $stmt = $pdo->prepare("INSERT INTO members (id, name, email, password, role) VALUES (?, ?, ?, ?, ?)");
             
             $id = generateId();
@@ -95,8 +96,9 @@ try {
             break;
 
         case 'updateMember':
+            requireAdmin();
             $data = json_decode(file_get_contents('php://input'), true);
-            
+
             if (!empty($data['password'])) {
                 $stmt = $pdo->prepare("UPDATE members SET name=?, email=?, password=?, role=? WHERE id=?");
                 $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
@@ -121,8 +123,9 @@ try {
             break;
 
         case 'deleteMember':
+            requireAdmin();
             $id = $_GET['id'] ?? '';
-            
+
             // Supprimer tous les souhaits du membre
             $stmt = $pdo->prepare("DELETE FROM wishes WHERE member_id = ?");
             $stmt->execute([$id]);
@@ -317,6 +320,7 @@ try {
             break;
 
         case 'uploadImage':
+            requireAuth();
             if (!isset($_FILES['image'])) {
                 throw new Exception('No file uploaded');
             }
@@ -326,13 +330,19 @@ try {
             break;
 
         case 'add':
+            requireAuth();
             $data = json_decode(file_get_contents('php://input'), true);
-            
+
             // Vérifier que member_id est fourni
             if (empty($data['member_id'])) {
                 throw new Exception('member_id est requis');
             }
-            
+            if (!canEdit($data['member_id'])) {
+                http_response_code(403);
+                echo json_encode(['success' => false, 'message' => 'Accès refusé']);
+                break;
+            }
+
             $stmt = $pdo->prepare("INSERT INTO wishes (id, name, category, price, link, image, description, favorite, member_id) 
                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             
@@ -353,9 +363,19 @@ try {
             break;
 
         case 'update':
+            requireAuth();
             $data = json_decode(file_get_contents('php://input'), true);
-            
-            $stmt = $pdo->prepare("UPDATE wishes SET name=?, category=?, price=?, link=?, image=?, description=?, favorite=?, member_id=? 
+
+            $stmt = $pdo->prepare("SELECT member_id FROM wishes WHERE id = ?");
+            $stmt->execute([$data['id'] ?? '']);
+            $existingWish = $stmt->fetch();
+            if (!$existingWish || !canEdit($existingWish['member_id'])) {
+                http_response_code(403);
+                echo json_encode(['success' => false, 'message' => 'Accès refusé']);
+                break;
+            }
+
+            $stmt = $pdo->prepare("UPDATE wishes SET name=?, category=?, price=?, link=?, image=?, description=?, favorite=?, member_id=?
                                    WHERE id=?");
             
             $stmt->execute([
@@ -374,27 +394,48 @@ try {
             break;
 
         case 'reserve':
+            requireAuth();
             $id = $_GET['id'] ?? '';
-            $reservedBy = $_GET['reserved_by'] ?? null;
-            
+            $reservedBy = getCurrentUserId();
+
             $stmt = $pdo->prepare("UPDATE wishes SET reserved_by = ? WHERE id = ?");
             $stmt->execute([$reservedBy, $id]);
-            
+
             echo json_encode(['success' => true, 'message' => 'Souhait réservé']);
             break;
 
         case 'unreserve':
+            requireAuth();
             $id = $_GET['id'] ?? '';
-            
+
+            $stmt = $pdo->prepare("SELECT reserved_by FROM wishes WHERE id = ?");
+            $stmt->execute([$id]);
+            $wishReservation = $stmt->fetch();
+            if (!$wishReservation || (!isAdmin() && $wishReservation['reserved_by'] !== getCurrentUserId())) {
+                http_response_code(403);
+                echo json_encode(['success' => false, 'message' => 'Accès refusé']);
+                break;
+            }
+
             $stmt = $pdo->prepare("UPDATE wishes SET reserved_by = NULL WHERE id = ?");
             $stmt->execute([$id]);
-            
+
             echo json_encode(['success' => true, 'message' => 'Réservation annulée']);
             break;
 
         case 'delete':
+            requireAuth();
             $id = $_GET['id'] ?? '';
-            
+
+            $stmt = $pdo->prepare("SELECT member_id FROM wishes WHERE id = ?");
+            $stmt->execute([$id]);
+            $wishToDelete = $stmt->fetch();
+            if (!$wishToDelete || !canEdit($wishToDelete['member_id'])) {
+                http_response_code(403);
+                echo json_encode(['success' => false, 'message' => 'Accès refusé']);
+                break;
+            }
+
             // Récupérer l'image avant de supprimer
             $stmt = $pdo->prepare("SELECT image FROM wishes WHERE id = ?");
             $stmt->execute([$id]);
